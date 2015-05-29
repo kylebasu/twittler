@@ -8,18 +8,36 @@
     <script>
 
       $(document).ready(function(){
+        
         var $body = $('body');
+        
         $body.html('');
-
+        
+        $('<button>View New Twitts</button>').appendTo($body);
         var index = streams.home.length - 1;
+        var initLength = streams.home.length
+        
         while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
-
+        var tweet = streams.home[index];
+        var $tweet = $('<div></div>');
+        $tweet.text('@' + tweet.user + ': ' + tweet.message);
+        $tweet.appendTo($body);
+        index -= 1;
+        };
+        
+        var diffInTwitt = 0
+        $('button').on('click', function(){
+          if (streams.home.length != initLength){
+            for (var i = 1; i < (streams.home.length-initLength); i++){
+              var tweet = streams.home[initLength + i]
+              var $tweet = $('<div></div>');
+              $tweet.text('@' + tweet.user + ': ' + tweet.message);
+              $tweet.insertAfter('button');
+              $('div').slideDown();
+            }
+            initLength = streams.home.length
+          }
+       });
       });
 
     </script>
