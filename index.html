@@ -10,34 +10,88 @@
       $(document).ready(function(){
         
         var $body = $('body');
-        
-        $body.html('');
-        
-        $('<button>View New Twitts</button>').appendTo($body);
         var index = streams.home.length - 1;
         var initLength = streams.home.length
+        var diviner = function () {$('div').css({'width': '50%',
+                                    'padding': '25px',
+                                    'float': 'right',
+                                    'background-color': '#F2F2F2',
+                                    'border-style': 'dotted',
+                                    'border-width': '1px',
+                                    'margin-top': '5px'})};
+
+        $body.css({'font-family': "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                    'background-color': '#D8F6CE'})
+        $('<h1>Twittler</h1>').appendTo($body);
+        
+        $('<button class="newtwitt">View New Twitts</button>').appendTo($body);
+        
+        $('h1').css({'text-align': 'center',
+                      'color': '#6E6E6E',
+                      'font-style': 'bold',
+                      'border-style': 'solid',
+                      'border-width': '1px'})
+        
+        $('.newtwitt').css({'width': '100%',
+                            'height': '50px',
+                            'font-size': '18px',
+                            'color': '#81DAF5',
+                            'border-style': 'double, solid',
+                            'background-color': '#F2F2F2',
+                            '-moz-border-radius': '15px',
+                            '-webkit-border-radius': '15px',})
         
         while(index >= 0){
         var tweet = streams.home[index];
+        var username = streams.home[index];
+        var $username = $('<button class="user"></button>');
         var $tweet = $('<div></div>');
-        $tweet.text('@' + tweet.user + ': ' + tweet.message);
+        $username.text('@' + tweet.user + ': ');
+        $tweet.text(tweet.message + " " + tweet.created_at);
         $tweet.appendTo($body);
+        $tweet.prepend($username);
         index -= 1;
         };
+        diviner();
         
-        var diffInTwitt = 0
-        $('button').on('click', function(){
+        
+        $('.newtwitt').on('click', function(){
           if (streams.home.length != initLength){
             for (var i = 1; i < (streams.home.length-initLength); i++){
-              var tweet = streams.home[initLength + i]
+              var tweet = streams.home[initLength + i];
+              var username = streams.home[initLength + i];
+              var $username = $('<button class="user"></button>');
               var $tweet = $('<div></div>');
-              $tweet.text('@' + tweet.user + ': ' + tweet.message);
-              $tweet.insertAfter('button');
+              $username.text('@' + tweet.user + ': ')
+              $tweet.text(tweet.message + " " + tweet.created_at);
+              $tweet.insertAfter('.newtwitt');
+              $tweet.prepend($username);
               $('div').slideDown();
+              diviner();
             }
             initLength = streams.home.length
+        
+            $('.user').on('click', function(){
+          var handle = $(this).text();
+          $('div').each(function(){
+            $(this).removeClass('notusername')
+            if(handle != $(this).find('.user').text()){
+              $(this).addClass('notusername');
+            }
+          });
+          $(".notusername").toggle();
+        });
           }
        });
+        $('.user').on('click', function(){
+          var handle = $(this).text();
+          $('div').each(function(){
+            $(this).removeClass('notusername');
+            if(handle != $(this).find('.user').text()){
+              $(this).addClass('notusername');}
+          });
+          $(".notusername").toggle();
+        });
       });
 
     </script>
